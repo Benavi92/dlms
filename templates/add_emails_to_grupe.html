@@ -1,0 +1,64 @@
+{% extends "base_generic.html" %}
+{% load staticfiles %}
+{% load cache_bust %}
+{% block head %}
+<script src="{% static "js/select2/select2.js" %}?{% cache_bust %}"></script>
+
+<link rel="stylesheet" href="{% static "select2.css" %}?{% cache_bust %}">
+<link rel="stylesheet" href="{% static "bootstrap-select.css" %}?{% cache_bust %}">
+{% endblock %}
+
+{% block msg %}
+{% if msg != None %}
+ <div class="alert alert-{{ msg.type }}" role="alert">
+  {{ msg.text }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<form  method="post" id="sendform" role="form" autocomplete="off" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="container">
+	<div class="row">
+        <div class="control-group" id="fields">
+            <div id="mails" class="controls">
+                    <div class="entry input-group col-xs-3">
+                        <label class="labelemail" for="selectmail">Користувач</label>
+    <select id="selectuser" name="user" required="true" style="width: 100%;">
+        {% for user in users %}
+  <option value="{{ user.id }}"> {{ user.get_username }} </option>
+        {% endfor %}
+    </select>
+
+<div class="container">
+	<div class="row">
+        <div class="control-group" id="fields">
+            <div id="mails" class="controls">
+                    <div class="entry input-group col-xs-3">
+                        <label class="labelemail" for="selectmail">Куди</label>
+    <select class="js-example-basic-multiple" id="selectmail" name="addres" required="true"
+      multiple="multiple" style="width: 100%;">
+        {% for adr in adress.list_mails.all %}
+  <option value="{{ adr.id }}"> {{ adr.name }} {{ adr.addres }} </option>
+        {% endfor %}
+        {% for adr in adress %}
+  <option value="{{ adr.id }}"> {{ adr.name }} {{ adr.addres }} </option>
+        {% endfor %}
+    </select>
+    <hr>
+                    </div>
+            </div>
+            <small>Ви можете додавати декілько адрес настиснувши на пусте місце вибору адреси</small>
+        </div>
+	</div>
+</div>
+    <hr>
+        </div>
+        <button type="submit" id="sendbutton" class="btn btn-primary">Отправить</button>
+</div>
+</form>
+
+{% endblock %}

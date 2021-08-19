@@ -1,0 +1,66 @@
+{% extends "base_generic.html" %}
+
+
+{% block head %}
+<title>{{ mail.title }}</title>
+{% endblock %}
+
+{% block content %}
+
+<body>
+<div class="card">
+  <div class="card-header">
+    Отримувачі: {% for adr in mail.to.all %}{{ adr.addres }}
+    {% endfor %}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"> Тема: {{ mail.title }}</h5>
+    <p class="card-text"> Повідомлення: {{ mail.body }}</p>
+    <p class="card-text"> Статус: {{ mail.get_status }}</p>
+    <p class="card-text"> Файли:
+    {% for file in mail.files.files.all %}
+    <a href="{{ file.url }}">{{ file.name }}</a>
+
+    {% endfor %}
+      </p>
+    <br>
+    <div class="button-flex-box">
+      <td><a href="/mails/resends/{{ mail.id }}/" class="btn btn-primary btn-lg btn-sm" role="button" aria-pressed="true">спробувати відіслати повтроно</a></td>
+      </div>
+  </div>
+  <div class="card-footer text-muted">
+    {{ mail.date_create }} відправник: {{ mail.sender }}
+  </div>
+</div>
+<h2> Історія відправлення </h2>
+<div class="log-bar">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Час відправлення</th>
+      <th scope="col">Результат</th>
+      <th scope="col">Повідомлення</th>
+      </tr>
+  </thead>
+  <tbody>
+ {% for log in mail.logs.all %}
+    <tr class="table-body-mail-list">
+      <th scope="row"/>{{ log.id }}</th>
+      <td> {{ log.when_attempted }} </td>
+      <td> {{ log.get_status }} </td>
+      <td>{{ log.log_message }}</td>
+
+    </tr>
+  {% endfor %}
+
+  </tbody>
+  </table>
+
+</div>
+
+
+
+
+
+{% endblock %}

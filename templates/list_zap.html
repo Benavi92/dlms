@@ -1,0 +1,50 @@
+{% extends "base_generic.html" %}
+
+{% load staticfiles %}
+{% load cache_bust %}
+{% block head %}
+<title>Список отправлений</title>
+<script src="{% static "js/select2/select2.js" %}?{% cache_bust %}"></script>
+{% endblock %}
+
+{% block msg %}
+{% if msg != None %}
+ <div class="alert alert-{{ msg.type }}" role="alert">
+  {{ msg.text }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Користувач</th>
+      <th scope="col">email</th>
+      <th scope="col">Опис</th>
+      <th scope="col">Дата створення</th>
+      <th scope="col">Статус</th>
+      <th scope="col">Дія</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for z in zap %}
+    <tr class="table-body-mail-list">
+      <td>{{ z.user.get_username }}</td>
+      <td>{{ z.email_addres }} </td>
+      <td>{{ z.text }}</td>
+      <td>{{ z.date_wenadd }}</td>
+      <td>{{ z.status }}</td>
+      <td><a href="/mails/list_zap/email_add_accept/{{ z.id }}/" class="btn btn-primary btn-lg btn-sm" role="button" aria-pressed="true">Опраціювати</a></td>
+    </tr>
+
+  {% endfor %}
+
+  </tbody>
+</table>
+
+
+
+
+{% endblock %}

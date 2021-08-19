@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+
+{% for upd in updates %}
+
+
+<div> <a href="/wiki/program/{{ upd.programComplex }}/{{ upd.id }}"> номер роззсилки : {{ upd.num }}</a></div>
+
+<hr>
+
+{% endfor %}
+{{ update.text|safe }}
+
+{% endblock %}

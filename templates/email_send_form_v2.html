@@ -1,0 +1,10 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <h1>Новое сообщение</h1>
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">отправить</button>
+    </form>
+
+{% endblock %}

@@ -1,0 +1,195 @@
+{% extends "base_generic.html" %}
+
+{% load staticfiles %}
+{% load cache_bust %}
+{% block head %}
+<title>Список отправлений</title>
+<script src="{% static "js/select2/select2.js" %}?{% cache_bust %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+<div id="email_list_msg" class="alert" style="display:none" role="alert">
+  none
+</div>
+
+<form id="search_bar" class="form-inline my-2" action="/mails/income/">
+  <input class="form-control mr-sm-2 searchbar" type="search" placeholder="тема/адреса/..." aria-label="Search" name="search">
+  <button class="btn btn-outline-success my-2 my-sm-0 search_submit" type="submit">Пошук</button>
+</form>
+
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Відправник</th>
+      <th scope="col">Тема</th>
+      <th scope="col">Дата надходження</th>
+      <th scope="col">Дата відправки</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for mail in mails %}
+    <tr class="table-body-mail-list">
+      <th scope="row"/> <a class="getid" href="/mails/income/{{ mail.id }}"> {{ mail.id }} </a></th>
+      <td><a href="/mails/income/?search={{ mail.sender }}"> {{ mail.sender}} </a></td>
+
+      <td>{{ mail.title }}</td>
+      <td>{{ mail.data_income }}</td>
+      <td>{{ mail.data_send }}</td>
+
+    </tr>
+
+    <tr class="table-body-mail-list row-hover-info">
+    <th scope="row"/> <a href="/mails/{{ mail.id }}"> {{ mail.id }} </a></th>
+      <td><a href="/mails/income/?search={{ mail.sender }}"> {{ mail.sender.username }} </a></td>
+      <td>
+      {% for adressant in mail.to.all %}
+      <span><a class="mails" href="/mails/income/?search={{ adressant.addres }}"> {{ adressant }}</a></span><br>
+      {% endfor %}
+      </td>
+      <td>{{ mail.title }}</td>
+      <td>{{ mail.date_create }}</td>
+      <td>{{ mail.get_status }}</td>
+      {% if mail.status == '1' %}
+      <td><a href="/mails/resends/{{ mail.id }}/" class="btn btn-primary btn-lg btn-sm resend_from_list" role="button" aria-pressed="true">повторити</a></td>
+
+      {% elif mail.status == '4' %}
+      <td><a href="/mails/resends/{{ mail.id }}/" class="btn btn-primary btn-lg btn-sm resend_from_list" role="button" aria-pressed="true">спробувати відіслати</a></td>
+
+      {% endif %}
+    </tr>
+  {% endfor %}
+
+  </tbody>
+</table>
+
+{% if search_query == "" %}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+   {% if mails.has_previous %}
+       <li class="page-item">
+    <a class="page-link" href="?page={{ mails.previous_page_number }}" tabindex="-1" >Попередня</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Попередня</a>
+    </li>
+    {% endif %}
+    {% for num in pages %}
+    {% if mails.number == num %}
+    <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+    {% endif %}
+
+    {% endfor %}
+
+    {% if mails.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ mails.next_page_number }}">Наступна</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+{% else %}
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+   {% if mails.has_previous %}
+       <li class="page-item">
+    <a class="page-link" href="?page={{ mails.previous_page_number }}&search={{ search_query }}" tabindex="-1" >Попередня</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Попередня</a>
+    </li>
+    {% endif %}
+    {% for num in pages %}
+    {% if mails.number == num %}
+    <li class="page-item active"><a class="page-link" href="?page={{num}}&search={{ search_query }}">{{num}}</a></li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{num}}&search={{ search_query }}">{{num}}</a></li>
+    {% endif %}
+
+    {% endfor %}
+
+    {% if mails.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ mails.next_page_number }}&search={{ search_query }}">Наступна</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+{% endif %}
+
+
+<div class="modal fade" id="modalview" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="alert msg" style="display: none" role="alert">
+           some text
+         </div>
+          <div class="card-header">
+            Отримувачі:
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"> Тема: </h5>
+            <p class="card-text massage"> Повідомлення: </p>
+            <p class="card-text status"> Статус: </p>
+            <p class="card-text files"> Файли:
+            <a href="{{ file.url }}">{{ file.name }}</a>
+
+              </p>
+            <br>
+            <div class="button-flex-box">
+              <td><a id="resend" href="/mails/resends/" class="btn btn-primary btn-lg btn-sm" role="button" aria-pressed="true">відіслати повтроно</a></td>
+              <td><a id="recreate" href="/mails/re_create_mail/" class="btn btn-primary btn-lg btn-sm" role="button" aria-pressed="true">створити на основі</a></td>
+            </div>
+
+          </div>
+          <div class="card-footer text-muted">
+             відправник:
+          </div>
+        </div>
+        <h2> Історія відправлення </h2>
+        <div class="log-bar">
+        <table class="table log_message">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Час відправлення</th>
+              <th scope="col">Результат</th>
+              <th scope="col">Повідомлення</th>
+              </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+          </table>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закити</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        {% load staticfiles %}
+    {% load cache_bust %}
+    <link rel="stylesheet" href="{% static "testcss.css" %}?{% cache_bust %}">
+</head>
+<body>
+<nav>
+    <ul>
+        <li class="nav-item">
+            <a href="#" class="nav-link">first</a>
+        </li>
+        <li class="nav-item"li>
+            <a href="#" class="nav-link">second</a>
+        </li>
+    </ul>
+</nav>
+<h1>Тестовая страница</h1>
+<div class="content-box">
+<div class="content">
+    <div class="content-title">
+    Title
+    </div>
+    <div class="content-main">
+    content-main info
+    </div>
+    <div class="content-futer">
+        pripiska
+    </div>
+</div>
+
+<div class="content">
+    <div class="content-title">
+    Title
+    </div>
+    <div class="content-main">
+    content-main info
+    </div>
+    <div class="content-futer">
+        pripiska
+    </div>
+</div>
+    </div>
+
+<div class="sidebar">
+    <div class="content-title">title to sidebar</div>
+    <div class="content-main">
+        content-sidebar
+    </div>
+</div>
+
+<table>
+    {% for x in i %}
+    <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>1</td>
+        <td>2</td>
+    </tr>
+    {% endfor %}
+
+</table>
+</body>
+</html>

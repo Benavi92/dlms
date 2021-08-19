@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+<body>
+    {% for program in programs %}
+    <a href="/wiki/program/{{ program}}">{{ program}}</a>  <br>
+    {% endfor %}
+
+</body>
+
+{% endblock %}

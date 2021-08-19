@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+    {% load staticfiles %}
+    {% load cache_bust %}
+    <link rel="stylesheet" href="{% static "style.css" %}?{% cache_bust %}">
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.js" %}"></script>
+
+<script src="{% static "js/rango-jquery.js" %}?{% cache_bust %}"></script>
+
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta charset="UTF-8">
+
+    {% block head %}
+    <title>Главная</title>
+    {% endblock %}
+
+</head>
+<body>
+
+{% if user.is_authenticated %}
+
+    {% if user.get_username == 'admin' %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url "email_lists" %}">Список відправленнь</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url "email_send_form" %}">Відіслати email</a>
+      </li>
+              <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ user.get_username }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="/admin">Админка</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/mails/addtogrupe/">Добавить адрес пользователю</a>
+        <a class="dropdown-item" href="/mails/list_zap/">Список запитів</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/mails/sendtest/">Повторить отправку</a>
+
+
+
+        </div>
+                      <li class="nav-item">
+        <a class="nav-link" href="#">{{ user.get_username }}</a>
+      </li>
+
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Выйти</a>
+      </li>
+
+                <li class="nav-item">
+        <a class="nav-link" href="{% url 'login'%}?next=/mails/allmails/">Войти</a>
+      </li>
+                        <li class="nav-item">
+        <a class="nav-link" href="{% url "emailadd" %}">Додати адресу</a>
+      </li>
+
+<li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Wiki
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <a class="dropdown-item" href="/wiki">Розсилки</a>
+        <div class="dropdown-divider"></div>
+
+        <a class="dropdown-item" href= "/wiki/program/ASOPD">ASOPD</a>
+        <div class="dropdown-divider"></div>
+
+        <a class="dropdown-item" href="/wiki/program/EDARP">EDARP</a>
+        <div class="dropdown-divider"></div>
+
+        <a class="dropdown-item" href="/wiki/program/SUBSIDY">SUBSIDY</a>
+        <div class="dropdown-divider"></div>
+
+        </div>
+
+</li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="/wiki/">Wiki</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="/mails/income/">Вхідна</a>
+    </li>
+
+
+
+  </ul>
+    <form class="form-inline my-2 my-lg-0" action="{% url "email_lists" %}">
+      <input class="form-control mr-sm-2" type="search" placeholder="тема/адреса/..." aria-label="Search" name="search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Пошук</button>
+    </form>
+  </div>
+</nav>
+ {% endif %}
+{% endif %}
+
+{% if user.is_authenticated %}
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h3>Меню</h3>
+</div>
+
+<ul class="list-unstyled components">
+    <p>Користувач: {{ user.get_username }}</p>
+    <li class="active">
+        <a href="#postmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-localsave">Пошта</a>
+        <ul class="list-unstyled collapse" id="postmenu">
+            <li>
+                <a href="/mails/mailsend/">Відправити</a>
+            </li>
+            <li>
+                <a href="/mails/income/">Вхідна</a>
+            </li>
+            <li>
+                <a href="/mails/allmails/">Вихідна</a>
+            </li>
+            <li>
+                <a href="/mails/emailadd/">Додати адресу</a>
+            </li>
+
+        </ul>
+    </li>
+    <li>
+        <a href="#">About</a>
+    </li>
+    <li>
+        <a href="#blogmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-localsave">Блог</a>
+        <ul class="collapse list-unstyled" id="blogmenu">
+            <li>
+                <a href="#">Розсилки</a>
+            </li>
+            <li>
+                <a href="#">ASOPD</a>
+            </li>
+            <li>
+                <a href="#">EDARP</a>
+            </li>
+            <li>
+                <a href="#">SUBSIDY</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">Portfolio</a>
+    </li>
+    <li>
+        <a href="#">Contact</a>
+    </li>
+</ul>
+
+</nav>
+{% endif %}
+
+
+
+<div class="without_sidebar">
+    {% block msg %}
+    {% endblock %}
+{% block content %}
+{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{% extends "base_generic.html" %}
+{% load staticfiles %}
+{% load cache_bust %}
+{% block head %}
+<script src="{% static "js/select2/select2.js" %}?{% cache_bust %}"></script>
+
+<link rel="stylesheet" href="{% static "select2.css" %}?{% cache_bust %}">
+<link rel="stylesheet" href="{% static "bootstrap-select.css" %}?{% cache_bust %}">
+{% endblock %}
+
+{% block content %}
+
+<div id="msg" class="alert alert-danger" role="alert" style="display: none">
+</div>
+
+<form action="/mails/mailsend/" method="post" id="sendform" role="form" autocomplete="off" enctype="multipart/form-data">
+    {% csrf_token %}
+<div class="container">
+	<div class="row">
+        <div class="control-group" id="fields">
+            <div id="mails" class="controls">
+                    <div class="entry input-group col-xs-3">
+                        <label class="labelemail" for="selectmail">Куди</label>
+    <select class="js-example-basic-multiple" id="selectmail" name="addres" required="true"
+      multiple="multiple" style="width: 100%;">
+        {% for adr in adress.list_mails.all %}
+  <option value="{{ adr.id }}" selected="selected"> {{ adr.name }} {{ adr.addres }} </option>
+        {% endfor %}
+        {% for adr in adress %}
+        {% if adr in msg.adress %}
+  <option value="{{ adr.id }}" selected="selected"> {{ adr.name }} {{ adr.addres }} </option>
+        {% else %}
+          <option value="{{ adr.id }}"> {{ adr.name }} {{ adr.addres }} </option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    <hr>
+
+                    </div>
+
+            </div>
+            <small>Ви можете додавати декілько адрес настиснувши на пусте місце вибору адреси</small>
+        </div>
+	</div>
+</div>
+    <hr>
+  <div class="form-group">
+  <div class="row">
+    <div class="col">
+      <input type="text" class="form-control" placeholder="Тема" name="title" required="true", value="{{ msg.title }}">
+    </div>
+  </div>
+      <small>Обов'язкова до заповнення</small>
+  </div>
+
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Повідомлення</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="body">{{ msg.text }}</textarea>
+  </div>
+    <div id="files" class="controls">
+<div class="form-file">
+  <input type="file" id="customFile" name="files">
+  <label for="customFile"></label>
+    <button class="btn btn-success btn-add-file" type="button">
+                                <span class="glyphicon glyphicon-plus">Добавить</span>
+                            </button>
+
+    </div>
+        </div>
+
+
+</form>
+<button id="sendbutton" class="btn btn-primary">Отправить</button>
+</div>
+
+{% endblock %}

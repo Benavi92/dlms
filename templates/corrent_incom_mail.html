@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block head %}
+<title>{{ mail.title }}</title>
+{% endblock %}
+
+{% block content %}
+
+<body>
+<div class="card">
+  <div class="card-header">
+  </div>
+  <div class="card-body">
+    <h5 class="card-title"> Від: {{ mail.sender }}</h5>
+    <h5 class="card-title"> Тема: {{ mail.title }}</h5>
+    <p class="card-text"> Надійло: {{ mail.data_income }}</p>
+    <p class="card-text"> Відправленно: {{ mail.data_send }}</p>
+    <p class="card-text"> Повідомлення: {{ mail.body|safe }}</p>
+
+    <p class="card-text"> Файли:
+    {% for file in mail.files.files.all %}
+    <p>
+      <a href="{{ file.url }}">{{ file.name }}</a>
+    </p>
+
+    {% endfor %}
+      </p>
+    <br>
+
+  </div>
+  <div class="card-footer text-muted">
+    {{ mail.date_create }} отримувачі: {{ mail.to }}
+  </div>
+</div>
+
+{% endblock %}

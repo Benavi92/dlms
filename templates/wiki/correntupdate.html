@@ -1,0 +1,19 @@
+{% extends "wiki\base_wiki.html" %}
+
+{% block main %}
+
+<div> <a href="/wiki/program/{{ update.programComplex }}">{{ update.programComplex }} </a> номер роззсилки : {{ update.num }}</div>
+
+<hr>
+
+{{ update.text|safe }}
+
+{% endblock %}
+
+{% block sidebar %}
+Інформація про роззсилку:
+
+
+
+{% endblock %}
+

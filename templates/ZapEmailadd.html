@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+
+{% block msg %}
+{% if msg != None %}
+ <div class="alert alert-{{ msg.type }}" role="alert">
+  {{ msg.text }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<form action="../emailadd/" method="post" role="form" autocomplete="off">
+    {% csrf_token %}
+    <h2> Форма запиту на додавання email адресу у довідник </h2>
+    <p><input id="email_add_" type="email" placeholder="email" required="required" name="email_addres"></p>
+    <p><input id="name_add_" type="text" placeholder="Назва" required="required" name="name"></p>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="text" placeholder="Пояснення"></textarea>
+    <p><input type="submit" value="Відправити"></p>
+
+</form>
+
+{% endblock %}

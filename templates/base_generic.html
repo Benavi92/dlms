@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+     <meta charset="UTF-8">
+    {% load staticfiles %}
+    {% load cache_bust %}
+    {% load setting_email %}
+    <link rel="stylesheet" href="{% static "style.css" %}?{% cache_bust %}">
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.js" %}"></script>
+<script src="{% static "js/select2/select2.js" %}?{% cache_bust %}"></script>
+
+
+<script src="{% static "js/rango-jquery.js" %}?{% cache_bust %}"></script>
+
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta charset="UTF-8">
+
+    {% block head %}
+    <title>Главная</title>
+    {% endblock %}
+
+</head>
+<body>
+
+{% if user.is_authenticated %}
+<nav id="sidebar" class="overflow-auto">
+  <div class="sidebar-header">
+      <h3><a href="/">Меню</a></h3>
+  </div>
+
+<ul class="list-unstyled components">
+    <p><b>{% setting_email %}</b></p>
+    <p>Користувач: {{ user.get_username }}</p>
+    {% if user.get_username == "admin" %}
+
+
+    <li class="active">
+        <a href="#adminmenu" id="nav-localsave-admin" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">admin tools</a>
+        <ul class="list-unstyled collapse" id="adminmenu">
+            <li>
+                <a href="/admin">Админка</a>
+            </li>
+            <li>
+                <a href="/mails/addtogrupe/">Добавить адрес пользователю</a>
+            </li>
+            <li>
+                <a href="/mails/list_zap/">Список запитів</a>
+            </li>
+
+        </ul>
+    </li>
+    {% endif %}
+
+    <li>
+        <a class="nav-link" href="/mails/calendar/">календар</a>
+    </li>
+
+
+
+    <li class="active">
+        <a href="#postmenu" id="nav-localsave-post" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Пошта</a>
+        <ul class="list-unstyled collapse" id="postmenu">
+            <li>
+                <a href="/mails/mailsend/">Відправити</a>
+            </li>
+            <li>
+                <a href="/mails/income/">Вхідна</a>
+            </li>
+            <li>
+                <a href="/mails/allmails/">Вихідна</a>
+            </li>
+            <li>
+                <a href="/mails/emailadd/">Додати адресу</a>
+            </li>
+
+        </ul>
+    </li>
+
+    <li>
+        <a href="#blogmenu" id="nav-localsave-blog" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-localsave">Блог</a>
+        <ul class="collapse list-unstyled" id="blogmenu">
+            <li>
+                <a href="/wiki">Розсилки</a>
+            </li>
+            <li>
+                <a href="/wiki/program/ASOPD">ASOPD</a>
+            </li>
+            <li>
+                <a href="/wiki/program/EDARP">EDARP</a>
+            </li>
+            <li>
+                <a href="/wiki/program/SUBSIDY">SUBSIDY</a>
+            </li>
+        </ul>
+    </li>
+
+    <li>
+        <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Вихід</a>
+    </li>
+</ul>
+
+</nav>
+{% endif %}
+
+
+
+<div class="ligth-box">
+    {% block msg %}
+    {% endblock %}
+{% block content %}
+{% endblock %}
+</div>
+</body>
+</html>

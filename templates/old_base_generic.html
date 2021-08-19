@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    {% load staticfiles %}
+    {% load cache_bust %}
+
+
+    <link rel="stylesheet" href="{% static "bootstrap-select.css" %}?{% cache_bust %}">
+
+
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+     <script src="{% static "js/bootstrap-select.js" %}?{% cache_bust %}"></script>
+     <script src="{% static "js/select2/select2.js" %}?{% cache_bust %}"></script>
+
+    <link rel="stylesheet" href="{% static "style.css" %}?{% cache_bust %}">
+    <link rel="stylesheet" href="{% static "select2.css" %}?{% cache_bust %}">
+
+<script src="{% static "js/rango-jquery.js" %}?{% cache_bust %}"></script>
+<script src="{% static "js/test.js" %}?{% cache_bust %}"></script>
+
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta charset="UTF-8">
+
+    {% block head %}
+    <title>Главная</title>
+    {% endblock %}
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{% url "email_lists" %}">Список відправленнь</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url "email_send_form" %}">Відіслати email</a>
+      </li>
+
+      {% if user.is_authenticated %}
+
+        {% if user.get_username == 'admin' %}
+
+              <li class="nav-item">
+        <a class="nav-link" href="/admin">{{ user.get_username }}</a>
+      </li>
+                <li class="nav-item">
+        <a class="nav-link" href="/mails/sendtest/">Повторить отправку</a>
+      </li>
+                {% else %}
+                      <li class="nav-item">
+        <a class="nav-link" href="#">{{ user.get_username }}</a>
+      </li>
+                {% endif %}
+
+        <li class="nav-item">
+        <a class="nav-link" href="{% url 'logout'%}?next={{request.path}}">Выйти</a>
+      </li>
+        {% else %}
+
+                <li class="nav-item">
+        <a class="nav-link" href="{% url 'login'%}?next=/mails/allmails/">Войти</a>
+      </li>
+   {% endif %}
+                        <li class="nav-item">
+        <a class="nav-link" href="{% url "emailadd" %}">Додати адресу</a>
+      </li>
+
+
+  </ul>
+    <form class="form-inline my-2 my-lg-0" action="{% url "email_lists" %}">
+      <input class="form-control mr-sm-2" type="search" placeholder="Что ищем?" aria-label="Search" name="search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Искать</button>
+    </form>
+  </div>
+</nav>
+<div class="ligth-box">
+    {% block msg %}
+    {% endblock %}
+{% block content %}
+{% endblock %}
+</div>
+</body>
+</html>

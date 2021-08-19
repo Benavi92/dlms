@@ -1,0 +1,46 @@
+{% extends "base_generic_without_sidebar.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+<div class="alert alert-danger" role="alert">
+<p>Введенні не коректні данні (пароль або логін)</p>
+</div>
+{% endif %}
+
+
+
+<div class="center-box">
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Можливо у вас не достатньо прав для перегляду данной сторінки </p>
+    {% else %}
+    <p>Для доступу для ціеї сторінки необхідно увійти під своїм обліковим записом</p>
+    {% endif %}
+{% endif %}
+<hr>
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+
+<table>
+<tr>
+  <td >{{ form.username.label_tag }}</td>
+  <td> {{ form.username }}</td>
+</tr>
+<tr>
+  <td>{{ form.password.label_tag }}</td>
+  <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<div class="flex-row">
+  <input type="submit" value="Увійти" />
+  <input type="hidden" name="next" value="{{ next }}" />
+  <p><a href="{% url 'password_reset' %}">Забули пароль?</a></p>
+</div>
+</form>
+
+</div>
+{# Assumes you setup the password_reset view in your URLconf #}
+
+{% endblock %}
